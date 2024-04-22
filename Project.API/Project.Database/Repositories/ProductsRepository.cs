@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Project.Database.Repositories
 {
-    public class ProductRepository : BaseRepository
+    public class ProductsRepository : BaseRepository
     {
-        public ProductRepository(PetShopDbContext petShopDbContext) : base(petShopDbContext)
+        public ProductsRepository(PetShopDbContext petShopDbContext) : base(petShopDbContext)
         {
         }
 
