@@ -19,6 +19,11 @@
     </PackageReference>
     <PackageReference Include="Npgsql" Version="8.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Project.Infrastructure\Project.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
