@@ -17,7 +17,7 @@ internal class Program
         builder.Services.AddRepositories();
 
         // Authentication % Authorization
-        = builder.Services.AddAuthentication(options =>
+        builder.Services.AddAuthentication(options =>
         {
             options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
