@@ -6,11 +6,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Project.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
@@ -22,6 +35,28 @@ namespace Project.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    AssignedRoleId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_AssignedRoleId",
+                        column: x => x.AssignedRoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,6 +84,11 @@ namespace Project.Database.Migrations
                 name: "IX_Products_StoreId",
                 table: "Products",
                 column: "StoreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_AssignedRoleId",
+                table: "Users",
+                column: "AssignedRoleId");
         }
 
         /// <inheritdoc />
@@ -58,7 +98,13 @@ namespace Project.Database.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Stores");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }
