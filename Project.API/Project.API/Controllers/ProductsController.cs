@@ -1,10 +1,11 @@
 ﻿using Project.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using Project.API.Controllers;
 
 namespace Project.Core.Controllers
 {
     [Route("api/products")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
         private ProductsService productsService { get; set; }
 

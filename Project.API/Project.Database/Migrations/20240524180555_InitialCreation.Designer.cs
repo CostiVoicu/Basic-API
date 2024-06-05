@@ -11,15 +11,15 @@ using Project.Database.Context;
 namespace Project.Database.Migrations
 {
     [DbContext(typeof(PetShopDbContext))]
-    [Migration("20240422124701_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240524180555_InitialCreation")]
+    partial class InitialCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -49,6 +49,23 @@ namespace Project.Database.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Project.Database.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Project.Database.Entities.Store", b =>
                 {
                     b.Property<int>("Id")
@@ -66,6 +83,36 @@ namespace Project.Database.Migrations
                     b.ToTable("Stores");
                 });
 
+            modelBuilder.Entity("Project.Database.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignedRoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedRoleId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Project.Database.Entities.Product", b =>
                 {
                     b.HasOne("Project.Database.Entities.Store", "Store")
@@ -75,6 +122,22 @@ namespace Project.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("Project.Database.Entities.User", b =>
+                {
+                    b.HasOne("Project.Database.Entities.Role", "AssignedRole")
+                        .WithMany("Users")
+                        .HasForeignKey("AssignedRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignedRole");
+                });
+
+            modelBuilder.Entity("Project.Database.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Project.Database.Entities.Store", b =>
